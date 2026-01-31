@@ -1,9 +1,9 @@
 # Gemini Deep Research MCP (Python)
 
-An MCP server (STDIO / JSON-RPC) that exposes two tools backed by the Gemini **Interactions API**:
+An MCP server (STDIO / JSON-RPC) that exposes tools backed by the Gemini **Interactions API**:
 
-- `gemini_deep_research` — start a Deep Research job or poll an existing one
-- `gemini_deep_research_followup` — ask a follow-up question using a prior interaction as context
+- `gemini_deep_research` (alias: `gemini-deep-research`) — start a Deep Research job or poll an existing one
+- `gemini_deep_research_followup` (alias: `gemini-deep-research-followup`) — ask a follow-up question using a prior interaction as context
 
 This uses:
 
@@ -16,17 +16,22 @@ This uses:
 
 Starts a Deep Research task using the specialized **Gemini Deep Research Agent** (default: `deep-research-pro-preview-12-2025`) or resumes polling an existing `interaction_id`.
 
+You must provide **exactly one** of:
+
+- `prompt` (start mode)
+- `interaction_id` (poll mode)
+
 Inputs:
 
 - `prompt` (string): required when starting new research
-- `interaction_id` (string): if provided, the server polls/resumes that interaction
+- `interaction_id` (string): required when polling/resuming an existing interaction
 - `wait` (boolean, default `true`): poll until completion or timeout
-- `timeout_seconds` (number, default `600`)
+- `timeout_seconds` (number, default `600`): must be > 0 when `wait=true`
 
 Outputs:
 
 - `interaction_id`
-- `status`: `in_progress`, `completed`, `failed`, or `cancelled`
+- `status`: raw Gemini interaction status string (terminal statuses are usually `completed`, `failed`, or `cancelled`)
 - `report_text`: best-effort concatenated text from `Interaction.outputs`
 - `citations`: extracted citation-like annotations if present
 
@@ -38,7 +43,7 @@ Inputs:
 
 - `previous_interaction_id` (string): required
 - `question` (string): required
-- `model` (`"flash" | "pro"`, default `"pro"`): Use `gemini-3-pro-preview` or `gemini-3-flash-preview`
+- `model` (string, optional): The model ID to use (e.g., `gemini-3-pro-preview` or `gemini-3-flash-preview`). Defaults to the configured `GEMINI_MODEL`.
 
 Outputs:
 
@@ -51,8 +56,7 @@ Outputs:
 Environment variables (loaded from `.env` if present):
 
 - `GEMINI_API_KEY` (required) — falls back to `GOOGLE_API_KEY` if set
-- `GEMINI_FLASH_MODEL` (default `gemini-3-flash-preview`)
-- `GEMINI_PRO_MODEL` (default `gemini-3-pro-preview`)
+- `GEMINI_MODEL` (default `gemini-3-pro-preview`)
 - `GEMINI_DEEP_RESEARCH_AGENT` (default `deep-research-pro-preview-12-2025`)
 
 Notes:

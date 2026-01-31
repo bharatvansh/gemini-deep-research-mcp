@@ -1,9 +1,9 @@
 # Gemini Deep Research MCP (Python)
 
-An MCP server (STDIO / JSON-RPC) that exposes tools backed by the Gemini **Interactions API**:
+An MCP server (STDIO / JSON-RPC) that exposes two tools backed by the Gemini **Interactions API**:
 
-- `gemini_deep_research` (alias: `gemini-deep-research`) — start a Deep Research job or poll an existing one
-- `gemini_deep_research_followup` (alias: `gemini-deep-research-followup`) — ask a follow-up question using a prior interaction as context
+- `gemini_deep_research` — start a Deep Research job or poll an existing one
+- `gemini_deep_research_followup` — ask a follow-up question using a prior interaction as context
 
 This uses:
 

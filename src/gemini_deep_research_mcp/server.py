@@ -147,32 +147,6 @@ def gemini_deep_research(
 
 
 @mcp.tool(
-    name="gemini-deep-research",
-    title="Gemini Deep Research",
-    description=(
-        _DEEP_RESEARCH_DESCRIPTION
-        + "\n\nCompatibility: this is an alias of `gemini_deep_research` with a kebab-case tool name."
-    ),
-    annotations=ToolAnnotations(openWorldHint=True),
-    structured_output=True,
-)
-def gemini_deep_research_alias(
-    prompt: Optional[str] = None,
-    interaction_id: Optional[str] = None,
-    wait: bool = True,
-    timeout_seconds: float = 600,
-) -> Dict[str, Any]:
-    """Alias for `gemini_deep_research` (kebab-case name)."""
-
-    return gemini_deep_research(
-        prompt=prompt,
-        interaction_id=interaction_id,
-        wait=wait,
-        timeout_seconds=timeout_seconds,
-    )
-
-
-@mcp.tool(
     title="Gemini Deep Research Follow-up",
     description=(
         "Ask a follow-up question about an existing research interaction.\n\n"
@@ -221,30 +195,6 @@ def gemini_deep_research_followup(
         "answer_text": result.get("text", ""),
         "citations": result.get("citations", []),
     }
-
-
-@mcp.tool(
-    name="gemini-deep-research-followup",
-    title="Gemini Deep Research Follow-up",
-    description=(
-        "Alias of `gemini_deep_research_followup` with a kebab-case tool name.\n\n"
-        "Use this to ask follow-up questions about a previous deep research interaction."
-    ),
-    annotations=ToolAnnotations(openWorldHint=True),
-    structured_output=True,
-)
-def gemini_deep_research_followup_alias(
-    previous_interaction_id: str,
-    question: str,
-    model: Optional[str] = None,
-) -> Dict[str, Any]:
-    """Alias for `gemini_deep_research_followup` (kebab-case name)."""
-
-    return gemini_deep_research_followup(
-        previous_interaction_id=previous_interaction_id,
-        question=question,
-        model=model,
-    )
 
 
 def main() -> None:

@@ -42,7 +42,7 @@ def gemini_deep_research(
     wait: bool = True,
     timeout_seconds: float = 600,
 ) -> Dict[str, Any]:
-    """Start a new Gemini Deep Research interaction, or poll an existing one."""
+    """Start a new Gemini Deep Research interaction (using the Deep Research Agent), or poll an existing one."""
 
     client, settings = _get_client_and_settings()
 
@@ -108,7 +108,7 @@ def gemini_deep_research_followup(
     question: str,
     model: Literal["flash", "pro"] = "pro",
 ) -> Dict[str, Any]:
-    """Ask a follow-up question using a previous interaction as context."""
+    """Ask a follow-up question regarding a research interaction, using Gemini 3 Flash or Pro models."""
 
     if not previous_interaction_id or not previous_interaction_id.strip():
         raise ValueError("`previous_interaction_id` is required")

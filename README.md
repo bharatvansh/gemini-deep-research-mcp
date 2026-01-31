@@ -14,7 +14,7 @@ This uses:
 
 ### `gemini_deep_research`
 
-Starts a Deep Research task (agent) or resumes polling an existing `interaction_id`.
+Starts a Deep Research task using the specialized **Gemini Deep Research Agent** (default: `deep-research-pro-preview-12-2025`) or resumes polling an existing `interaction_id`.
 
 Inputs:
 
@@ -32,11 +32,13 @@ Outputs:
 
 ### `gemini_deep_research_followup`
 
+Asks a follow-up question using a prior research interaction as context, powered by **Gemini 3** models.
+
 Inputs:
 
 - `previous_interaction_id` (string): required
 - `question` (string): required
-- `model` (`"flash" | "pro"`, default `"pro"`)
+- `model` (`"flash" | "pro"`, default `"pro"`): Use `gemini-3-pro-preview` or `gemini-3-flash-preview`
 
 Outputs:
 

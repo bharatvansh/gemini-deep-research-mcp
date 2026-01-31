@@ -1,0 +1,14 @@
+{
+  "servers": {
+    "gemini-deep-research": {
+      "command": "python",
+      "args": [
+        "-m",
+        "gemini_deep_research_mcp"
+      ],
+      "env": {
+        "GEMINI_API_KEY": ""
+      }
+    }
+  }
+}

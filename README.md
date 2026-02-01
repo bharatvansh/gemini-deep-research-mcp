@@ -1,121 +1,95 @@
-# Gemini Deep Research MCP (Python)
+# Gemini Deep Research MCP
 
-An MCP server (STDIO / JSON-RPC) that exposes a tool backed by the Gemini **Interactions API**:
+An MCP server that exposes Gemini's **Deep Research Agent** for comprehensive web research.
 
-- `gemini_deep_research` — conduct comprehensive web research using Gemini's Deep Research Agent
-
-**Features:**
-- Blocks until research completes (typically 10-20 minutes)
-- Automatic citation URL resolution — converts temporary redirect URLs to real source URLs
-- Optional citation control
-
-This uses:
-
-- Python `mcp` SDK (`FastMCP`)
-- Official `google-genai` SDK (`from google import genai`)
-
-## Tools
-
-### `gemini_deep_research`
-
-Conducts comprehensive web research using Gemini's Deep Research Agent (default: `deep-research-pro-preview-12-2025`). The tool blocks until research completes, typically taking 10-20 minutes.
-
-**When to use:**
-
-- Researching complex topics requiring multi-source analysis
-- Need synthesized information from the web
-- Require fact-checking and cross-referencing of information
-
-**Inputs:**
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `prompt` | string | ✓ | — | Your research question or topic |
-| `include_citations` | boolean | | `true` | Include resolved source URLs in the report |
-
-**Outputs:**
-
-| Field | Description |
-|-------|-------------|
-| `status` | Final state: `completed`, `failed`, or `cancelled` |
-| `report_text` | The synthesized research report with findings |
-
-**Citation Resolution:**
-
-When `include_citations` is `true` (default), the tool automatically resolves Gemini's temporary redirect URLs to actual source URLs. For example:
-
-- `vertexaisearch.cloud.google.com/grounding-api-redirect/...` → `https://docs.python.org/3/whatsnew/3.13.html`
-
-This makes citations clickable and verifiable. Set `include_citations` to `false` if you don't need sources or want faster responses.
-
-## Configuration
-
-Environment variables (loaded from `.env` if present):
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `GEMINI_API_KEY` | ✓ | — | Your Gemini API key (falls back to `GOOGLE_API_KEY` if set) |
-| `GEMINI_DEEP_RESEARCH_AGENT` | | `deep-research-pro-preview-12-2025` | Deep Research agent model |
-
-**Notes:**
-
-- For Deep Research, the Interactions API requires `background=True` **and** `store=True`.
-- Logs are written to **stderr** (stdout is reserved for MCP protocol).
-
-## Installation
+## Quick Start
 
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/gemini-deep-research-mcp.git
-cd gemini-deep-research-mcp
-
-# Create and activate virtual environment
-python -m venv .venv
-.venv\Scripts\activate    # Windows
-# source .venv/bin/activate  # macOS/Linux
-
-# Install the package
-pip install -e .
+pip install gemini-deep-research-mcp
 ```
 
-## VS Code MCP Setup
+Set your API key:
+```bash
+export GEMINI_API_KEY="your-api-key"  # macOS/Linux
+set GEMINI_API_KEY=your-api-key       # Windows CMD
+$env:GEMINI_API_KEY="your-api-key"    # Windows PowerShell
+```
 
-This repo includes a starter `.vscode/mcp.json`.
+## MCP Client Setup
 
-1. Create / activate a venv and install the package (`pip install -e .`).
-2. Set `GEMINI_API_KEY` in your environment (or edit `.env`).
-3. Reload VS Code so MCP picks up the server.
+### VS Code (Copilot)
 
-## Claude Desktop (Windows) Setup
-
-Claude Desktop uses a config file (usually `claude_desktop_config.json`) with an `mcpServers` map.
-
-On Windows, **escape backslashes** in JSON, and prefer absolute paths.
-
-Example (adjust Python path / venv path to your machine):
+Add to your VS Code settings or `.vscode/mcp.json`:
 
 ```json
 {
-  "mcpServers": {
-    "gemini-deep-research": {
-      "command": "C:\\Path\\To\\python.exe",
-      "args": ["-m", "gemini_deep_research_mcp"],
-      "env": {
-        "GEMINI_API_KEY": "YOUR_KEY_HERE"
+  "mcp": {
+    "servers": {
+      "gemini-deep-research": {
+        "command": "gemini-deep-research-mcp",
+        "env": {
+          "GEMINI_API_KEY": "your-api-key"
+        }
       }
     }
   }
 }
 ```
 
+### Claude Desktop
+
+Add to `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "gemini-deep-research": {
+      "command": "gemini-deep-research-mcp",
+      "env": {
+        "GEMINI_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+
+> **Windows**: If `gemini-deep-research-mcp` isn't in PATH, use full path: `C:\\Users\\YOU\\...\\python.exe` with args `["-m", "gemini_deep_research_mcp"]`
+
+## Tool: `gemini_deep_research`
+
+Conducts comprehensive web research using Gemini's Deep Research Agent. Blocks until research completes (typically 10-20 minutes).
+
+**When to use:**
+- Complex topics requiring multi-source analysis
+- Synthesized information from the web
+- Fact-checking and cross-referencing
+
+**Parameters:**
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `prompt` | string | ✓ | — | Your research question or topic |
+| `include_citations` | boolean | | `true` | Include resolved source URLs |
+
+**Output:**
+
+| Field | Description |
+|-------|-------------|
+| `status` | `completed`, `failed`, or `cancelled` |
+| `report_text` | Synthesized research report |
+
+## Configuration
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `GEMINI_API_KEY` | ✓ | — | Your Gemini API key |
+| `GEMINI_DEEP_RESEARCH_AGENT` | | `deep-research-pro-preview-12-2025` | Model to use |
+
 ## Development
 
-- Package code is under `src/gemini_deep_research_mcp/`.
-- Tests live in `tests/`.
-
-Run tests:
-
 ```bash
+git clone https://github.com/bharatvansh/gemini-deep-research-mcp.git
+cd gemini-deep-research-mcp
 pip install -e .[dev]
 pytest
 ```

@@ -32,21 +32,6 @@ def get_interaction(client: genai.Client, interaction_id: str) -> Any:
     return client.interactions.get(interaction_id)
 
 
-def followup(
-    client: genai.Client,
-    *,
-    previous_interaction_id: str,
-    question: str,
-    model: str,
-) -> Any:
-    return client.interactions.create(
-        model=model,
-        input=question,
-        previous_interaction_id=previous_interaction_id,
-        store=True,
-    )
-
-
 def poll_until_terminal(
     client: genai.Client,
     *,

@@ -1,9 +1,8 @@
 # Gemini Deep Research MCP (Python)
 
-An MCP server (STDIO / JSON-RPC) that exposes two tools backed by the Gemini **Interactions API**:
+An MCP server (STDIO / JSON-RPC) that exposes a tool backed by the Gemini **Interactions API**:
 
 - `gemini_deep_research` — conduct comprehensive web research using Gemini's Deep Research Agent
-- `gemini_deep_research_followup` — ask follow-up questions using a prior research interaction as context
 
 This uses:
 
@@ -33,39 +32,10 @@ Conducts comprehensive web research using Gemini's Deep Research Agent (default:
 
 | Field | Description |
 |-------|-------------|
-| `interaction_id` | Unique identifier for this research (use with follow-up tool) |
+| `interaction_id` | Unique identifier for this research |
 | `status` | Final state: `completed`, `failed`, or `cancelled` |
 | `report_text` | The synthesized research report with findings |
 | `citations` | List of source citations |
-
----
-
-### `gemini_deep_research_followup`
-
-Ask follow-up questions about a completed research interaction, using the original research as context.
-
-**When to use:**
-
-- Clarifying specific points from a research report
-- Drilling deeper into a particular aspect of the research
-- Asking related questions that build on previous findings
-- Requesting additional analysis, comparisons, or explanations
-
-**Inputs:**
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `previous_interaction_id` | string | ✓ | — | The interaction ID from a completed `gemini_deep_research` call |
-| `question` | string | ✓ | — | Your follow-up question |
-| `model` | string | | Configured `GEMINI_MODEL` | Override the Gemini model (e.g., `gemini-3-pro-preview`, `gemini-3-flash-preview`) |
-
-**Outputs:**
-
-| Field | Description |
-|-------|-------------|
-| `interaction_id` | New interaction ID for this follow-up |
-| `answer_text` | The AI's response to your question |
-| `citations` | Any additional citations referenced in the answer |
 
 ## Configuration
 
@@ -74,7 +44,6 @@ Environment variables (loaded from `.env` if present):
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `GEMINI_API_KEY` | ✓ | — | Your Gemini API key (falls back to `GOOGLE_API_KEY` if set) |
-| `GEMINI_MODEL` | | `gemini-3-pro-preview` | Model for follow-up questions |
 | `GEMINI_DEEP_RESEARCH_AGENT` | | `deep-research-pro-preview-12-2025` | Deep Research agent model |
 
 **Notes:**

@@ -45,120 +45,114 @@ def _require_nonempty(value: Optional[str], *, field: str) -> str:
     return value
 
 
-_DEEP_RESEARCH_DESCRIPTION = (
-    "Start a Gemini Deep Research interaction (Deep Research Agent) OR poll an existing interaction.\n\n"
-    "Provide EXACTLY ONE of: `prompt` (to start) or `interaction_id` (to poll). Do not provide both.\n\n"
-    "Typical usage:\n"
-    "- Start: set `prompt`, set `wait=false` to get an interaction id quickly.\n"
-    "- Poll: call again with `interaction_id`; set `wait=true` to block until a terminal status or timeout.\n\n"
-    "Notes:\n"
-    "- When `wait=true`, `timeout_seconds` must be > 0 and controls polling duration.\n"
-    "- `status` is the raw Gemini interaction status string; terminal statuses are usually: completed/failed/cancelled.\n"
-    "- `citations` is best-effort extraction from output annotations and may vary by model/agent response format."
-)
+_DEEP_RESEARCH_DESCRIPTION = """
+Conduct comprehensive web research using Gemini's Deep Research Agent.
+
+When to use this tool:
+- Researching complex topics requiring multi-source analysis
+- Need synthesized information with citations from the web
+- Require fact-checking and cross-referencing of information
+
+Parameters:
+- `prompt`: Your research question or topic (required)
+- `timeout_seconds`: Max time to wait for completion (default: 900 seconds)
+
+Returns:
+- `interaction_id`: Unique identifier for this research (use with follow-up tool)
+- `status`: Final state (completed, failed, cancelled)
+- `report_text`: The synthesized research report with findings
+- `citations`: List of source citations
+
+Notes:
+- This tool blocks until research completes (typically 10-20 minutes)
+- For follow-up questions, use the `gemini_deep_research_followup` tool with the returned `interaction_id`
+""".strip()
 
 
 @mcp.tool(
     title="Gemini Deep Research",
     description=_DEEP_RESEARCH_DESCRIPTION,
-    annotations=ToolAnnotations(openWorldHint=True),
+    annotations=ToolAnnotations(
+        openWorldHint=True,
+        readOnlyHint=False,
+        idempotentHint=False,
+    ),
     structured_output=True,
 )
 def gemini_deep_research(
-    prompt: Optional[str] = None,
-    interaction_id: Optional[str] = None,
-    wait: bool = True,
-    timeout_seconds: float = 600,
+    prompt: str,
+    timeout_seconds: float = 900,
 ) -> Dict[str, Any]:
-    """Start or poll a Gemini Deep Research interaction.
+    """Conduct deep research on a topic and wait for the complete report."""
 
-    This tool has two mutually-exclusive modes:
-
-    1) Start mode: provide `prompt`.
-    2) Poll mode: provide `interaction_id`.
-    """
-
-    prompt_is_set = prompt is not None and str(prompt).strip() != ""
-    interaction_is_set = interaction_id is not None and str(interaction_id).strip() != ""
-
-    if prompt_is_set and interaction_is_set:
-        raise ValueError("Provide exactly one of `prompt` or `interaction_id` (not both).")
-    if not prompt_is_set and not interaction_is_set:
-        raise ValueError("Provide exactly one of `prompt` or `interaction_id`.")
-    if wait and timeout_seconds <= 0:
-        raise ValueError("`timeout_seconds` must be > 0 when `wait=true`.")
+    if not prompt or not prompt.strip():
+        raise ValueError("`prompt` is required")
+    if timeout_seconds <= 0:
+        raise ValueError("`timeout_seconds` must be > 0")
 
     client, settings = _get_client_and_settings()
 
-    if interaction_is_set:
-        interaction_id = _require_nonempty(interaction_id, field="interaction_id")
-        # Resume/poll an existing interaction.
-        if wait:
-            interaction = poll_until_terminal(
-                client,
-                interaction_id=interaction_id,
-                timeout_seconds=timeout_seconds,
-                poll_interval_seconds=settings.poll_interval_seconds,
-            )
-        else:
-            interaction = client.interactions.get(interaction_id)
-
-        result = interaction_to_result(interaction)
-        return {
-            "interaction_id": result.get("interaction_id") or interaction_id,
-            "status": result.get("status"),
-            "report_text": result.get("text", ""),
-            "citations": result.get("citations", []),
-        }
-
-    prompt = _require_nonempty(prompt, field="prompt")
-
-    # Start a new deep research job.
-    initial = start_deep_research(client, prompt=prompt, agent=settings.deep_research_agent)
-    new_id = getattr(initial, "id", None) or (
+    # Start the deep research job
+    initial = start_deep_research(client, prompt=prompt.strip(), agent=settings.deep_research_agent)
+    interaction_id = getattr(initial, "id", None) or (
         initial.get("id") if isinstance(initial, dict) else None
     )
-    if not new_id:
-        # Shouldn't happen, but keep it explicit.
+    if not interaction_id:
         raise RuntimeError("Gemini SDK did not return an interaction id.")
 
-    if not wait:
-        result = interaction_to_result(initial)
-        return {
-            "interaction_id": new_id,
-            "status": result.get("status"),
-            "report_text": result.get("text", ""),
-            "citations": result.get("citations", []),
-        }
-
+    # Wait for completion
     interaction = poll_until_terminal(
         client,
-        interaction_id=new_id,
+        interaction_id=interaction_id,
         timeout_seconds=timeout_seconds,
         poll_interval_seconds=settings.poll_interval_seconds,
     )
     result = interaction_to_result(interaction)
     return {
-        "interaction_id": result.get("interaction_id") or new_id,
+        "interaction_id": result.get("interaction_id") or interaction_id,
         "status": result.get("status"),
         "report_text": result.get("text", ""),
         "citations": result.get("citations", []),
     }
 
 
+_FOLLOWUP_DESCRIPTION = """
+Ask follow-up questions about a completed research interaction, using the original research as context.
+
+When to use this tool:
+- Clarifying specific points from a research report
+- Drilling deeper into a particular aspect of the research
+- Asking related questions that build on previous findings
+- Requesting additional analysis, comparisons, or explanations
+
+Required Parameters:
+- `previous_interaction_id`: The interaction ID from a completed `gemini_deep_research` call
+- `question`: Your follow-up question
+
+Optional Parameters:
+- `model`: Override the Gemini model (e.g., 'gemini-3-pro-preview', 'gemini-3-flash-preview')
+  - Pro: Higher quality, more thorough responses
+  - Flash: Faster responses, good for simple clarifications
+  - Defaults to GEMINI_MODEL environment variable
+
+Returns:
+- `interaction_id`: New interaction ID for this follow-up
+- `answer_text`: The AI's response to your question
+- `citations`: Any additional citations referenced in the answer
+
+Notes:
+- You must only use this tool after completing a `gemini_deep_research` interaction.
+""".strip()
+
+
 @mcp.tool(
     title="Gemini Deep Research Follow-up",
-    description=(
-        "Ask a follow-up question about an existing research interaction.\n\n"
-        "Inputs:\n"
-        "- `previous_interaction_id`: the prior interaction id to use as context (required).\n"
-        "- `question`: the follow-up question to ask (required).\n"
-        "- `model`: optional Gemini model id override; defaults to GEMINI_MODEL.\n\n"
-        "Notes:\n"
-        "- This creates a new interaction linked to the previous one (store=true).\n"
-        "- Returns best-effort extracted citations from output annotations."
+    description=_FOLLOWUP_DESCRIPTION,
+    annotations=ToolAnnotations(
+        openWorldHint=True,
+        readOnlyHint=True,
+        idempotentHint=True,
     ),
-    annotations=ToolAnnotations(openWorldHint=True),
     structured_output=True,
 )
 def gemini_deep_research_followup(

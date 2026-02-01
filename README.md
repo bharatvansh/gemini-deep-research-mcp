@@ -2,8 +2,8 @@
 
 An MCP server (STDIO / JSON-RPC) that exposes two tools backed by the Gemini **Interactions API**:
 
-- `gemini_deep_research` — start a Deep Research job or poll an existing one
-- `gemini_deep_research_followup` — ask a follow-up question using a prior interaction as context
+- `gemini_deep_research` — conduct comprehensive web research using Gemini's Deep Research Agent
+- `gemini_deep_research_followup` — ask follow-up questions using a prior research interaction as context
 
 This uses:
 
@@ -14,67 +14,99 @@ This uses:
 
 ### `gemini_deep_research`
 
-Starts a Deep Research task using the specialized **Gemini Deep Research Agent** (default: `deep-research-pro-preview-12-2025`) or resumes polling an existing `interaction_id`.
+Conducts comprehensive web research using Gemini's Deep Research Agent (default: `deep-research-pro-preview-12-2025`). The tool blocks until research completes, typically taking 10-20 minutes.
 
-You must provide **exactly one** of:
+**When to use:**
 
-- `prompt` (start mode)
-- `interaction_id` (poll mode)
+- Researching complex topics requiring multi-source analysis
+- Need synthesized information with citations from the web
+- Require fact-checking and cross-referencing of information
 
-Inputs:
+**Inputs:**
 
-- `prompt` (string): required when starting new research
-- `interaction_id` (string): required when polling/resuming an existing interaction
-- `wait` (boolean, default `true`): poll until completion or timeout
-- `timeout_seconds` (number, default `600`): must be > 0 when `wait=true`
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `prompt` | string | ✓ | — | Your research question or topic |
+| `timeout_seconds` | number | | 900 | Max time to wait for completion (must be > 0) |
 
-Outputs:
+**Outputs:**
 
-- `interaction_id`
-- `status`: raw Gemini interaction status string (terminal statuses are usually `completed`, `failed`, or `cancelled`)
-- `report_text`: best-effort concatenated text from `Interaction.outputs`
-- `citations`: extracted citation-like annotations if present
+| Field | Description |
+|-------|-------------|
+| `interaction_id` | Unique identifier for this research (use with follow-up tool) |
+| `status` | Final state: `completed`, `failed`, or `cancelled` |
+| `report_text` | The synthesized research report with findings |
+| `citations` | List of source citations |
+
+---
 
 ### `gemini_deep_research_followup`
 
-Asks a follow-up question using a prior research interaction as context, powered by **Gemini 3** models.
+Ask follow-up questions about a completed research interaction, using the original research as context.
 
-Inputs:
+**When to use:**
 
-- `previous_interaction_id` (string): required
-- `question` (string): required
-- `model` (string, optional): The model ID to use (e.g., `gemini-3-pro-preview` or `gemini-3-flash-preview`). Defaults to the configured `GEMINI_MODEL`.
+- Clarifying specific points from a research report
+- Drilling deeper into a particular aspect of the research
+- Asking related questions that build on previous findings
+- Requesting additional analysis, comparisons, or explanations
 
-Outputs:
+**Inputs:**
 
-- `interaction_id`
-- `answer_text`
-- `citations`
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `previous_interaction_id` | string | ✓ | — | The interaction ID from a completed `gemini_deep_research` call |
+| `question` | string | ✓ | — | Your follow-up question |
+| `model` | string | | Configured `GEMINI_MODEL` | Override the Gemini model (e.g., `gemini-3-pro-preview`, `gemini-3-flash-preview`) |
+
+**Outputs:**
+
+| Field | Description |
+|-------|-------------|
+| `interaction_id` | New interaction ID for this follow-up |
+| `answer_text` | The AI's response to your question |
+| `citations` | Any additional citations referenced in the answer |
 
 ## Configuration
 
 Environment variables (loaded from `.env` if present):
 
-- `GEMINI_API_KEY` (required) — falls back to `GOOGLE_API_KEY` if set
-- `GEMINI_MODEL` (default `gemini-3-pro-preview`)
-- `GEMINI_DEEP_RESEARCH_AGENT` (default `deep-research-pro-preview-12-2025`)
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `GEMINI_API_KEY` | ✓ | — | Your Gemini API key (falls back to `GOOGLE_API_KEY` if set) |
+| `GEMINI_MODEL` | | `gemini-3-pro-preview` | Model for follow-up questions |
+| `GEMINI_DEEP_RESEARCH_AGENT` | | `deep-research-pro-preview-12-2025` | Deep Research agent model |
 
-Notes:
+**Notes:**
 
 - For Deep Research, the Interactions API requires `background=True` **and** `store=True`.
 - Logs are written to **stderr** (stdout is reserved for MCP protocol).
 
-## VS Code MCP setup
+## Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/your-username/gemini-deep-research-mcp.git
+cd gemini-deep-research-mcp
+
+# Create and activate virtual environment
+python -m venv .venv
+.venv\Scripts\activate    # Windows
+# source .venv/bin/activate  # macOS/Linux
+
+# Install the package
+pip install -e .
+```
+
+## VS Code MCP Setup
 
 This repo includes a starter `.vscode/mcp.json`.
-
-Typical flow:
 
 1. Create / activate a venv and install the package (`pip install -e .`).
 2. Set `GEMINI_API_KEY` in your environment (or edit `.env`).
 3. Reload VS Code so MCP picks up the server.
 
-## Claude Desktop (Windows) setup
+## Claude Desktop (Windows) Setup
 
 Claude Desktop uses a config file (usually `claude_desktop_config.json`) with an `mcpServers` map.
 
@@ -100,3 +132,14 @@ Example (adjust Python path / venv path to your machine):
 
 - Package code is under `src/gemini_deep_research_mcp/`.
 - Tests live in `tests/`.
+
+Run tests:
+
+```bash
+pip install -e .[dev]
+pytest
+```
+
+## License
+
+MIT

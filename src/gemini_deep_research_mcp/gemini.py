@@ -28,14 +28,14 @@ def start_deep_research(client: genai.Client, *, prompt: str, agent: str) -> Any
     )
 
 
-def get_interaction(client: genai.Client, interaction_id: str) -> Any:
-    return client.interactions.get(interaction_id)
+def get_interaction(client: genai.Client, job_id: str) -> Any:
+    return client.interactions.get(job_id)
 
 
 def poll_until_terminal(
     client: genai.Client,
     *,
-    interaction_id: str,
+    job_id: str,
     timeout_seconds: float,
     poll_interval_seconds: float,
 ) -> Any:
@@ -43,7 +43,7 @@ def poll_until_terminal(
 
     interaction: Optional[Any] = None
     while True:
-        interaction = get_interaction(client, interaction_id)
+        interaction = get_interaction(client, job_id)
         status = getattr(interaction, "status", None) or (
             interaction.get("status") if isinstance(interaction, dict) else None
         )

@@ -28,10 +28,8 @@ def test_deep_research_returns_structured_only(monkeypatch: pytest.MonkeyPatch) 
         server,
         "interaction_to_result",
         lambda _interaction: {
-            "interaction_id": "int1",
             "status": "completed",
             "text": "REPORT",
-            "citations": [{"url": "https://example.com"}],
         },
     )
 
@@ -42,7 +40,6 @@ def test_deep_research_returns_structured_only(monkeypatch: pytest.MonkeyPatch) 
     assert result.content == []
     assert result.isError is False
     assert result.structuredContent is not None
-    assert result.structuredContent["interaction_id"] == "int1"
     assert result.structuredContent["status"] == "completed"
     assert result.structuredContent["report_text"] == "REPORT"
 
@@ -70,10 +67,8 @@ def test_deep_research_fastmcp_validation_accepts_structured_content(
         server,
         "interaction_to_result",
         lambda _interaction: {
-            "interaction_id": "int1",
             "status": "completed",
             "text": "REPORT",
-            "citations": [],
         },
     )
 

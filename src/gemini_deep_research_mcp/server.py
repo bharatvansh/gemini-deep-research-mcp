@@ -16,10 +16,8 @@ logger = logging.getLogger(__name__)
 
 
 class DeepResearchOutput(TypedDict):
-    interaction_id: str
     status: str
     report_text: str
-    citations: list[dict[str, Any]]
 
 
 def _configure_logging() -> None:
@@ -57,7 +55,7 @@ Conduct comprehensive web research using Gemini's Deep Research Agent.
 
 When to use this tool:
 - Researching complex topics requiring multi-source analysis
-- Need synthesized information with citations from the web
+- Need synthesized information from the web
 - Require fact-checking and cross-referencing of information
 
 Parameters:
@@ -65,10 +63,8 @@ Parameters:
 - `timeout_seconds`: Max time to wait for completion (default: 900 seconds)
 
 Returns:
-- `interaction_id`: Unique identifier for this research
 - `status`: Final state (completed, failed, cancelled)
 - `report_text`: The synthesized research report with findings
-- `citations`: List of source citations
 
 Notes:
 - This tool blocks until research completes (typically 10-20 minutes)
@@ -100,16 +96,16 @@ def gemini_deep_research(
 
     # Start the deep research job
     initial = start_deep_research(client, prompt=prompt.strip(), agent=settings.deep_research_agent)
-    interaction_id = getattr(initial, "id", None) or (
+    job_id = getattr(initial, "id", None) or (
         initial.get("id") if isinstance(initial, dict) else None
     )
-    if not interaction_id:
-        raise RuntimeError("Gemini SDK did not return an interaction id.")
+    if not job_id:
+        raise RuntimeError("Gemini SDK did not return a research job id.")
 
     # Wait for completion
     interaction = poll_until_terminal(
         client,
-        interaction_id=interaction_id,
+        job_id=job_id,
         timeout_seconds=timeout_seconds,
         poll_interval_seconds=settings.poll_interval_seconds,
     )
@@ -118,10 +114,8 @@ def gemini_deep_research(
     if status is None:
         status = "unknown"
     payload: DeepResearchOutput = {
-        "interaction_id": result.get("interaction_id") or interaction_id,
         "status": str(status),
         "report_text": result.get("text", ""),
-        "citations": result.get("citations", []),
     }
 
     # IMPORTANT: when returning a dict from a structured tool, the MCP lowlevel server

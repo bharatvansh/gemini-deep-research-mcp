@@ -18,7 +18,7 @@ Conducts comprehensive web research using Gemini's Deep Research Agent (default:
 **When to use:**
 
 - Researching complex topics requiring multi-source analysis
-- Need synthesized information with citations from the web
+- Need synthesized information from the web
 - Require fact-checking and cross-referencing of information
 
 **Inputs:**
@@ -32,10 +32,8 @@ Conducts comprehensive web research using Gemini's Deep Research Agent (default:
 
 | Field | Description |
 |-------|-------------|
-| `interaction_id` | Unique identifier for this research |
 | `status` | Final state: `completed`, `failed`, or `cancelled` |
 | `report_text` | The synthesized research report with findings |
-| `citations` | List of source citations |
 
 ## Configuration
 

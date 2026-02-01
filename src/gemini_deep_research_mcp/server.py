@@ -50,7 +50,7 @@ def _require_nonempty(value: Optional[str], *, field: str) -> str:
     return value
 
 
-# Default timeout for research (not exposed to tool)
+# Default timeout for research
 _DEFAULT_TIMEOUT_SECONDS = 1200.0
 
 _DEEP_RESEARCH_DESCRIPTION = """
@@ -68,6 +68,7 @@ Parameters:
 Returns:
 - `status`: Final state (completed, failed, cancelled)
 - `report_text`: The synthesized research report with findings
+- `sources`: List of sources used in the research (if enabled)
 
 Notes:
 - This tool blocks until research completes (typically 10-20 minutes)

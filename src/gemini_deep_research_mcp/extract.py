@@ -3,6 +3,8 @@ from __future__ import annotations
 import re
 from typing import Any, Iterable, List, Optional
 
+from .resolve import resolve_sources_in_text
+
 
 def _strip_duplicate_references(text: str) -> str:
     """Remove the redundant 'References' section while keeping 'Sources'.
@@ -45,7 +47,11 @@ def outputs_to_text(outputs: Optional[Iterable[Any]]) -> str:
         text = _get(out, "text")
         if isinstance(text, str) and text.strip():
             parts.append(text)
-    return _strip_duplicate_references("\n\n".join(parts).strip())
+    
+    result = _strip_duplicate_references("\n\n".join(parts).strip())
+    # Resolve redirect URLs to actual source URLs
+    result = resolve_sources_in_text(result)
+    return result
 
 
 def interaction_to_result(interaction: Any) -> dict[str, Any]:

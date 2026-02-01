@@ -36,7 +36,7 @@ def _get(obj: Any, key: str, default: Any = None) -> Any:
     return getattr(obj, key, default)
 
 
-def outputs_to_text(outputs: Optional[Iterable[Any]]) -> str:
+def outputs_to_text(outputs: Optional[Iterable[Any]], *, include_citations: bool = True) -> str:
     """Best-effort conversion of Interaction.outputs to a readable string."""
 
     if not outputs:
@@ -49,16 +49,19 @@ def outputs_to_text(outputs: Optional[Iterable[Any]]) -> str:
             parts.append(text)
     
     result = _strip_duplicate_references("\n\n".join(parts).strip())
-    # Resolve redirect URLs to actual source URLs
-    result = resolve_sources_in_text(result)
+    
+    # Resolve redirect URLs to actual source URLs (if citations enabled)
+    if include_citations:
+        result = resolve_sources_in_text(result)
+    
     return result
 
 
-def interaction_to_result(interaction: Any) -> dict[str, Any]:
+def interaction_to_result(interaction: Any, *, include_citations: bool = True) -> dict[str, Any]:
     """Convert an Interaction object to a JSON-serializable summary."""
 
     outputs = _get(interaction, "outputs")
-    text = outputs_to_text(outputs)
+    text = outputs_to_text(outputs, include_citations=include_citations)
 
     return {
         "status": _get(interaction, "status"),

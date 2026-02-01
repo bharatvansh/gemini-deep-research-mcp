@@ -27,13 +27,13 @@ def test_deep_research_returns_structured_only(monkeypatch: pytest.MonkeyPatch) 
     monkeypatch.setattr(
         server,
         "interaction_to_result",
-        lambda _interaction: {
+        lambda _interaction, *, include_citations=True: {
             "status": "completed",
             "text": "REPORT",
         },
     )
 
-    result = server.gemini_deep_research(prompt="test", timeout_seconds=1)
+    result = server.gemini_deep_research(prompt="test", include_citations=False)
     assert isinstance(result, CallToolResult)
 
     # Critical: avoid JSON-serialized duplicate output in `content`.
@@ -66,7 +66,7 @@ def test_deep_research_fastmcp_validation_accepts_structured_content(
     monkeypatch.setattr(
         server,
         "interaction_to_result",
-        lambda _interaction: {
+        lambda _interaction, *, include_citations=True: {
             "status": "completed",
             "text": "REPORT",
         },
@@ -77,7 +77,7 @@ def test_deep_research_fastmcp_validation_accepts_structured_content(
     # Tool.run is async; use a local event loop without extra deps.
     import asyncio
 
-    result = asyncio.run(tool.run({"prompt": "test", "timeout_seconds": 1}, convert_result=True))
+    result = asyncio.run(tool.run({"prompt": "test", "include_citations": False}, convert_result=True))
     assert isinstance(result, CallToolResult)
     assert result.structuredContent is not None
     assert result.structuredContent["report_text"] == "REPORT"

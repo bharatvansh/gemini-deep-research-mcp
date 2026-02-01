@@ -8,7 +8,8 @@ def test_outputs_to_text_joins_text_fields() -> None:
         {"type": "tool", "text": ""},
         {"type": "text", "text": "  "},
     ]
-    assert outputs_to_text(outputs) == "Hello\n\nWorld"
+    # Disable citations to avoid HTTP resolution in tests
+    assert outputs_to_text(outputs, include_citations=False) == "Hello\n\nWorld"
 
 
 def test_interaction_to_result_returns_status_and_text() -> None:
@@ -21,6 +22,7 @@ def test_interaction_to_result_returns_status_and_text() -> None:
             }
         ],
     }
-    result = interaction_to_result(interaction)
+    # Disable citations to avoid HTTP resolution in tests
+    result = interaction_to_result(interaction, include_citations=False)
     assert result["status"] == "completed"
     assert result["text"] == "Hello"

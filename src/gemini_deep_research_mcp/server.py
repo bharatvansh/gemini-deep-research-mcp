@@ -50,6 +50,9 @@ def _require_nonempty(value: Optional[str], *, field: str) -> str:
     return value
 
 
+# Default timeout for research (not exposed to tool)
+_DEFAULT_TIMEOUT_SECONDS = 1200.0
+
 _DEEP_RESEARCH_DESCRIPTION = """
 Conduct comprehensive web research using Gemini's Deep Research Agent.
 
@@ -60,7 +63,7 @@ When to use this tool:
 
 Parameters:
 - `prompt`: Your research question or topic (required)
-- `timeout_seconds`: Max time to wait for completion (default: 900 seconds)
+- `include_citations`: Whether to include source URLs in the report (default: true)
 
 Returns:
 - `status`: Final state (completed, failed, cancelled)
@@ -83,14 +86,12 @@ Notes:
 )
 def gemini_deep_research(
     prompt: str,
-    timeout_seconds: float = 900,
+    include_citations: bool = True,
 ) -> Annotated[CallToolResult, DeepResearchOutput]:
     """Conduct deep research on a topic and wait for the complete report."""
 
     if not prompt or not prompt.strip():
         raise ValueError("`prompt` is required")
-    if timeout_seconds <= 0:
-        raise ValueError("`timeout_seconds` must be > 0")
 
     client, settings = _get_client_and_settings()
 
@@ -106,10 +107,10 @@ def gemini_deep_research(
     interaction = poll_until_terminal(
         client,
         job_id=job_id,
-        timeout_seconds=timeout_seconds,
+        timeout_seconds=_DEFAULT_TIMEOUT_SECONDS,
         poll_interval_seconds=settings.poll_interval_seconds,
     )
-    result = interaction_to_result(interaction)
+    result = interaction_to_result(interaction, include_citations=include_citations)
     status = result.get("status")
     if status is None:
         status = "unknown"

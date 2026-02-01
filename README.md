@@ -4,6 +4,11 @@ An MCP server (STDIO / JSON-RPC) that exposes a tool backed by the Gemini **Inte
 
 - `gemini_deep_research` — conduct comprehensive web research using Gemini's Deep Research Agent
 
+**Features:**
+- Blocks until research completes (typically 10-20 minutes)
+- Automatic citation URL resolution — converts temporary redirect URLs to real source URLs
+- Optional citation control
+
 This uses:
 
 - Python `mcp` SDK (`FastMCP`)
@@ -26,7 +31,7 @@ Conducts comprehensive web research using Gemini's Deep Research Agent (default:
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
 | `prompt` | string | ✓ | — | Your research question or topic |
-| `timeout_seconds` | number | | 900 | Max time to wait for completion (must be > 0) |
+| `include_citations` | boolean | | `true` | Include resolved source URLs in the report |
 
 **Outputs:**
 
@@ -34,6 +39,14 @@ Conducts comprehensive web research using Gemini's Deep Research Agent (default:
 |-------|-------------|
 | `status` | Final state: `completed`, `failed`, or `cancelled` |
 | `report_text` | The synthesized research report with findings |
+
+**Citation Resolution:**
+
+When `include_citations` is `true` (default), the tool automatically resolves Gemini's temporary redirect URLs to actual source URLs. For example:
+
+- `vertexaisearch.cloud.google.com/grounding-api-redirect/...` → `https://docs.python.org/3/whatsnew/3.13.html`
+
+This makes citations clickable and verifiable. Set `include_citations` to `false` if you don't need sources or want faster responses.
 
 ## Configuration
 

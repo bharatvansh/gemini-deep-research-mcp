@@ -1,10 +1,15 @@
 {
-    "name": "gemini-deep-research-mcp",
-    "version": "0.1.1",
+    "name": "@bharatvansh/gemini-deep-research-mcp",
+    "version": "0.1.2",
     "description": "MCP server exposing Gemini Deep Research (Interactions API) tools",
     "bin": {
-        "gemini-deep-research-mcp": "./bin/cli.js"
+        "gemini-deep-research-mcp": "bin/cli.js"
     },
+    "files": [
+        "bin",
+        "README.npm.md"
+    ],
+    "readme": "README.npm.md",
     "keywords": [
         "mcp",
         "gemini",
@@ -19,7 +24,7 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/bharatvansh/gemini-deep-research-mcp.git"
+        "url": "git+https://github.com/bharatvansh/gemini-deep-research-mcp.git"
     },
     "homepage": "https://github.com/bharatvansh/gemini-deep-research-mcp",
     "bugs": {

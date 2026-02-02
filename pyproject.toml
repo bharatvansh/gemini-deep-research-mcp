@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gemini-deep-research-mcp"
-version = "0.1.1"
+version = "0.1.2"
 description = "MCP server exposing Gemini Deep Research (Interactions API) tools"
-readme = "README.md"
+readme = "README.pypi.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [{ name = "Ayush", email = "ayusin439@gmail.com" }]

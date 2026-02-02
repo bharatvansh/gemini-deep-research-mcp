@@ -1,0 +1,31 @@
+{
+    "name": "gemini-deep-research-mcp",
+    "version": "0.1.1",
+    "description": "MCP server exposing Gemini Deep Research (Interactions API) tools",
+    "bin": {
+        "gemini-deep-research-mcp": "./bin/cli.js"
+    },
+    "keywords": [
+        "mcp",
+        "gemini",
+        "deep-research",
+        "ai",
+        "google",
+        "model-context-protocol",
+        "research",
+        "agent"
+    ],
+    "author": "Ayush <ayusin439@gmail.com>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/bharatvansh/gemini-deep-research-mcp.git"
+    },
+    "homepage": "https://github.com/bharatvansh/gemini-deep-research-mcp",
+    "bugs": {
+        "url": "https://github.com/bharatvansh/gemini-deep-research-mcp/issues"
+    },
+    "engines": {
+        "node": ">=16"
+    }
+}

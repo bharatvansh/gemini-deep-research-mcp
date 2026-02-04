@@ -1,6 +1,6 @@
 {
     "name": "@bharatvansh/gemini-deep-research-mcp",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "MCP server exposing Gemini Deep Research (Interactions API) tools",
     "bin": {
         "gemini-deep-research-mcp": "bin/cli.js"

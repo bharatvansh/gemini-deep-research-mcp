@@ -54,7 +54,7 @@ def _require_nonempty(value: Optional[str], *, field: str) -> str:
 _DEFAULT_TIMEOUT_SECONDS = 1200.0
 
 _DEEP_RESEARCH_DESCRIPTION = """
-Conduct comprehensive web research using Gemini's Deep Research Agent.
+Conduct comprehensive web research using a Deep Research Agent.
 
 When to use this tool:
 - Researching complex topics requiring multi-source analysis

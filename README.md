@@ -10,10 +10,9 @@ An MCP server that exposes Gemini's **Deep Research Agent** for comprehensive we
 
 | IDE | Install |
 |-----|---------|
-| **Cursor** | [![Install in Cursor](https://img.shields.io/badge/Install-Cursor-blue?logo=cursor)](cursor://anysphere.cursor-deeplink/mcp/install?name=gemini-deep-research&config=eyJjb21tYW5kIjogInV2eCIsICJhcmdzIjogWyJnZW1pbmktZGVlcC1yZXNlYXJjaC1tY3AiXSwgImVudiI6IHsiR0VNSU5JX0FQSV9LRVkiOiAieW91ci1hcGkta2V5In19) |
-| **VS Code** | [![Install in VS Code](https://img.shields.io/badge/Install-VS%20Code-007ACC?logo=visualstudiocode)](vscode:mcp/install?config=%7B%22name%22%3A%20%22gemini-deep-research%22%2C%20%22command%22%3A%20%22uvx%22%2C%20%22args%22%3A%20%5B%22gemini-deep-research-mcp%22%5D%2C%20%22env%22%3A%20%7B%22GEMINI_API_KEY%22%3A%20%22your-api-key%22%7D%7D) |
-| **VS Code Insiders** | [![Install in VS Code Insiders](https://img.shields.io/badge/Install-VS%20Code%20Insiders-24bfa5?logo=visualstudiocode)](vscode-insiders:mcp/install?config=%7B%22name%22%3A%20%22gemini-deep-research%22%2C%20%22command%22%3A%20%22uvx%22%2C%20%22args%22%3A%20%5B%22gemini-deep-research-mcp%22%5D%2C%20%22env%22%3A%20%7B%22GEMINI_API_KEY%22%3A%20%22your-api-key%22%7D%7D) |
-| **Antigravity** | [See manual install](#antigravity) |
+| **Cursor** | [![Install in Cursor](https://img.shields.io/badge/Install-Cursor-blue?logo=cursor)](https://cursor.com/en/install-mcp?name=gemini-deep-research&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJnZW1pbmktZGVlcC1yZXNlYXJjaC1tY3AiXSwiZW52Ijp7IkdFTUlOSV9BUElfS0VZIjoieW91ci1hcGkta2V5In19) |
+| **VS Code** | [![Install in VS Code](https://img.shields.io/badge/Install-VS%20Code-007ACC?logo=visualstudiocode)](https://insiders.vscode.dev/redirect/mcp/install?name=gemini-deep-research&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22gemini-deep-research-mcp%22%5D%2C%22env%22%3A%7B%22GEMINI_API_KEY%22%3A%22your-api-key%22%7D%7D) |
+| **VS Code Insiders** | [![Install in VS Code Insiders](https://img.shields.io/badge/Install-VS%20Code%20Insiders-24bfa5?logo=visualstudiocode)](https://insiders.vscode.dev/redirect/mcp/install?name=gemini-deep-research&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22gemini-deep-research-mcp%22%5D%2C%22env%22%3A%7B%22GEMINI_API_KEY%22%3A%22your-api-key%22%7D%7D&quality=insiders) |
 
 > **Note:** After clicking, replace `your-api-key` with your [Gemini API key](https://aistudio.google.com/apikey). VS Code requires version 1.101+.
 

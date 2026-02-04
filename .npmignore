@@ -1,0 +1,21 @@
+# Ignore the main README so npm uses README.npm.md
+README.md
+README.pypi.md
+
+# Python/PyPI files
+*.py
+pyproject.toml
+src/
+tests/
+*.egg-info/
+dist/
+build/
+__pycache__/
+.pytest_cache/
+
+# Config files
+.env
+.env.example
+.vscode/
+.github/
+.git/

@@ -10,7 +10,7 @@ An MCP server that exposes Gemini's **Deep Research Agent** for comprehensive we
 
 | IDE | Install |
 |-----|---------|
-| **Cursor** | [![Install in Cursor](https://img.shields.io/badge/Install-Cursor-blue?logo=cursor)](https://cursor.com/install-mcp?name=gemini-deep-research&config=eyJjb21tYW5kIjogInV2eCIsICJhcmdzIjogWyJnZW1pbmktZGVlcC1yZXNlYXJjaC1tY3AiXSwgImVudiI6IHsiR0VNSU5JX0FQSV9LRVkiOiAieW91ci1hcGkta2V5In19) |
+| **Cursor** | [![Install in Cursor](https://img.shields.io/badge/Install-Cursor-blue?logo=cursor)](cursor://anysphere.cursor-deeplink/mcp/install?name=gemini-deep-research&config=eyJjb21tYW5kIjogInV2eCIsICJhcmdzIjogWyJnZW1pbmktZGVlcC1yZXNlYXJjaC1tY3AiXSwgImVudiI6IHsiR0VNSU5JX0FQSV9LRVkiOiAieW91ci1hcGkta2V5In19) |
 | **VS Code** | [![Install in VS Code](https://img.shields.io/badge/Install-VS%20Code-007ACC?logo=visualstudiocode)](vscode:mcp/install?config=%7B%22name%22%3A%20%22gemini-deep-research%22%2C%20%22command%22%3A%20%22uvx%22%2C%20%22args%22%3A%20%5B%22gemini-deep-research-mcp%22%5D%2C%20%22env%22%3A%20%7B%22GEMINI_API_KEY%22%3A%20%22your-api-key%22%7D%7D) |
 | **VS Code Insiders** | [![Install in VS Code Insiders](https://img.shields.io/badge/Install-VS%20Code%20Insiders-24bfa5?logo=visualstudiocode)](vscode-insiders:mcp/install?config=%7B%22name%22%3A%20%22gemini-deep-research%22%2C%20%22command%22%3A%20%22uvx%22%2C%20%22args%22%3A%20%5B%22gemini-deep-research-mcp%22%5D%2C%20%22env%22%3A%20%7B%22GEMINI_API_KEY%22%3A%20%22your-api-key%22%7D%7D) |
 | **Antigravity** | [See manual install](#antigravity) |
@@ -65,6 +65,117 @@ npx @bharatvansh/gemini-deep-research-mcp
 ```
 </details>
 
+<details>
+<summary><strong>Windsurf config</strong></summary>
+
+Add to `~/.codeium/windsurf/mcp_config.json` (macOS/Linux) or `%USERPROFILE%\.codeium\windsurf\mcp_config.json` (Windows):
+
+```json
+{
+  "mcpServers": {
+    "gemini-deep-research": {
+      "command": "npx",
+      "args": ["-y", "@bharatvansh/gemini-deep-research-mcp"],
+      "env": {
+        "GEMINI_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Cline config</strong></summary>
+
+```json
+{
+  "mcpServers": {
+    "gemini-deep-research": {
+      "command": "npx",
+      "args": ["-y", "@bharatvansh/gemini-deep-research-mcp"],
+      "env": {
+        "GEMINI_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Claude Code config</strong></summary>
+
+Add to `~/.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "gemini-deep-research": {
+      "command": "npx",
+      "args": ["-y", "@bharatvansh/gemini-deep-research-mcp"],
+      "env": {
+        "GEMINI_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Codex config</strong></summary>
+
+Add to `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.gemini-deep-research]
+command = "npx"
+args = ["-y", "@bharatvansh/gemini-deep-research-mcp"]
+
+[mcp_servers.gemini-deep-research.env]
+GEMINI_API_KEY = "your-api-key"
+```
+</details>
+
+<details>
+<summary><strong>Cursor config</strong></summary>
+
+Add to `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "gemini-deep-research": {
+      "command": "npx",
+      "args": ["-y", "@bharatvansh/gemini-deep-research-mcp"],
+      "env": {
+        "GEMINI_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Antigravity config</strong></summary>
+
+Add to your Antigravity `mcp_config.json`:
+
+```json
+{
+  "gemini-deep-research": {
+    "command": "npx",
+    "args": ["-y", "@bharatvansh/gemini-deep-research-mcp"],
+    "env": {
+      "GEMINI_API_KEY": "your-api-key"
+    }
+  }
+}
+```
+</details>
+
 ---
 
 ### Using uvx (Python)
@@ -111,6 +222,117 @@ uvx gemini-deep-research-mcp
 ```
 </details>
 
+<details>
+<summary><strong>Windsurf config</strong></summary>
+
+Add to `~/.codeium/windsurf/mcp_config.json` (macOS/Linux) or `%USERPROFILE%\.codeium\windsurf\mcp_config.json` (Windows):
+
+```json
+{
+  "mcpServers": {
+    "gemini-deep-research": {
+      "command": "uvx",
+      "args": ["gemini-deep-research-mcp"],
+      "env": {
+        "GEMINI_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Cline config</strong></summary>
+
+```json
+{
+  "mcpServers": {
+    "gemini-deep-research": {
+      "command": "uvx",
+      "args": ["gemini-deep-research-mcp"],
+      "env": {
+        "GEMINI_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Claude Code config</strong></summary>
+
+Add to `~/.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "gemini-deep-research": {
+      "command": "uvx",
+      "args": ["gemini-deep-research-mcp"],
+      "env": {
+        "GEMINI_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Codex config</strong></summary>
+
+Add to `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.gemini-deep-research]
+command = "uvx"
+args = ["gemini-deep-research-mcp"]
+
+[mcp_servers.gemini-deep-research.env]
+GEMINI_API_KEY = "your-api-key"
+```
+</details>
+
+<details>
+<summary><strong>Cursor config</strong></summary>
+
+Add to `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "gemini-deep-research": {
+      "command": "uvx",
+      "args": ["gemini-deep-research-mcp"],
+      "env": {
+        "GEMINI_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Antigravity config</strong></summary>
+
+Add to your Antigravity `mcp_config.json`:
+
+```json
+{
+  "gemini-deep-research": {
+    "command": "uvx",
+    "args": ["gemini-deep-research-mcp"],
+    "env": {
+      "GEMINI_API_KEY": "your-api-key"
+    }
+  }
+}
+```
+</details>
+
 ---
 
 ### Using pip
@@ -147,6 +369,111 @@ pip install gemini-deep-research-mcp
       "env": {
         "GEMINI_API_KEY": "your-api-key"
       }
+    }
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Windsurf config</strong></summary>
+
+Add to `~/.codeium/windsurf/mcp_config.json` (macOS/Linux) or `%USERPROFILE%\.codeium\windsurf\mcp_config.json` (Windows):
+
+```json
+{
+  "mcpServers": {
+    "gemini-deep-research": {
+      "command": "gemini-deep-research-mcp",
+      "env": {
+        "GEMINI_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Cline config</strong></summary>
+
+```json
+{
+  "mcpServers": {
+    "gemini-deep-research": {
+      "command": "gemini-deep-research-mcp",
+      "env": {
+        "GEMINI_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Claude Code config</strong></summary>
+
+Add to `~/.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "gemini-deep-research": {
+      "command": "gemini-deep-research-mcp",
+      "env": {
+        "GEMINI_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Codex config</strong></summary>
+
+Add to `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.gemini-deep-research]
+command = "gemini-deep-research-mcp"
+
+[mcp_servers.gemini-deep-research.env]
+GEMINI_API_KEY = "your-api-key"
+```
+</details>
+
+<details>
+<summary><strong>Cursor config</strong></summary>
+
+Add to `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "gemini-deep-research": {
+      "command": "gemini-deep-research-mcp",
+      "env": {
+        "GEMINI_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Antigravity config</strong></summary>
+
+Add to your Antigravity `mcp_config.json`:
+
+```json
+{
+  "gemini-deep-research": {
+    "command": "gemini-deep-research-mcp",
+    "env": {
+      "GEMINI_API_KEY": "your-api-key"
     }
   }
 }

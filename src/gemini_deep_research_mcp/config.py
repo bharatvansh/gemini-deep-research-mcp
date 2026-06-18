@@ -22,9 +22,9 @@ def load_settings() -> Settings:
 
     api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or ""
 
-    model = os.getenv("GEMINI_MODEL", "gemini-3-pro-preview")
+    model = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
     deep_research_agent = os.getenv(
-        "GEMINI_DEEP_RESEARCH_AGENT", "deep-research-pro-preview-12-2025"
+        "GEMINI_DEEP_RESEARCH_AGENT", "deep-research-preview-04-2026"
     )
 
     return Settings(

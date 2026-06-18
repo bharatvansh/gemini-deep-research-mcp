@@ -216,7 +216,8 @@ Conducts comprehensive web research using Gemini's Deep Research Agent. Blocks u
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `GEMINI_API_KEY` | ✓ | — | Your [Gemini API key](https://aistudio.google.com/apikey) |
-| `GEMINI_DEEP_RESEARCH_AGENT` | | `deep-research-pro-preview-12-2025` | Model to use |
+| `GEMINI_DEEP_RESEARCH_AGENT` | | `deep-research-preview-04-2026` | Deep Research agent to use. Set to `deep-research-max-preview-04-2026` for maximum thoroughness, or `deep-research-preview-04-2026` for standard speed. |
+| `GEMINI_MODEL` | | `gemini-3.5-flash` | Default Gemini model fallback for other tasks. |
 
 ## Links
 

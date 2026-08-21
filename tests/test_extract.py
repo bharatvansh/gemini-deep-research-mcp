@@ -2,7 +2,13 @@ from gemini_deep_research_mcp.extract import interaction_to_result, outputs_to_t
 
 
 def test_interaction_to_result_reads_modern_sdk_steps() -> None:
-    from google.genai._interactions.types import Interaction
+    try:
+        from google.genai._gaos.types.interactions import Interaction
+    except ImportError:
+        try:
+            from google.genai._interactions.types import Interaction
+        except ImportError:
+            from google.genai.types import Interaction
 
     interaction = Interaction.model_validate(
         {

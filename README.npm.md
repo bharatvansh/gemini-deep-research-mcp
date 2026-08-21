@@ -192,24 +192,39 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 
 ---
 
-## Tool: `gemini_deep_research`
+## Tools
 
-Conducts comprehensive web research using Gemini's Deep Research Agent. Blocks until research completes (typically 10-20 minutes).
+### 1. `start_deep_research`
 
-**When to use:**
-- Complex topics requiring multi-source analysis
-- Synthesized information from the web
-- Fact-checking and cross-referencing
+Initiates a deep, multi-step web research job in the background using Google's Deep Research Agent. Returns a `job_id`, which you can use to check the status of completion using `check_deep_research(job_id=...)`.
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| `prompt` | string | ✓ | — | Your research question or topic |
-| `include_citations` | boolean | | `true` | Include resolved source URLs |
+| `prompt` | string | ✓ | — | Your comprehensive research question or topic |
 
 | Output | Description |
 |--------|-------------|
-| `status` | `completed`, `failed`, or `cancelled` |
-| `report_text` | Synthesized research report |
+| `job_id` | Unique tracking ID for the research job |
+| `status` | Initial job state (e.g. `in_progress`) |
+
+---
+
+### 2. `check_deep_research`
+
+Checks the status of a Deep Research job using its `job_id` and returns the complete report once finished.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `job_id` | string | ✓ | — | The research tracking ID from `start_deep_research` |
+| `include_citations` | boolean | | `true` | Include source URLs in the report |
+
+| Output | Description |
+|--------|-------------|
+| `job_id` | The tracking ID of the research job |
+| `status` | Exact current job state (`in_progress`, `completed`, `failed`, or `cancelled`) |
+| `report_text` | Synthesized markdown research report (when `completed`) |
+| `uptime` | Elapsed time while the job is in progress, when available |
+| `error` | Failure details, when the API provides them |
 
 ## Configuration
 

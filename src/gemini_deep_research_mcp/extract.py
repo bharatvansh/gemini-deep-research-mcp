@@ -36,8 +36,15 @@ def _get(obj: Any, key: str, default: Any = None) -> Any:
     return getattr(obj, key, default)
 
 
+def _finalize_text(text: str, *, include_citations: bool) -> str:
+    result = _strip_duplicate_references(text.strip())
+    if include_citations:
+        result = resolve_sources_in_text(result)
+    return result
+
+
 def outputs_to_text(outputs: Optional[Iterable[Any]], *, include_citations: bool = True) -> str:
-    """Best-effort conversion of Interaction.outputs to a readable string."""
+    """Best-effort conversion of text-bearing output items to readable text."""
 
     if not outputs:
         return ""
@@ -48,20 +55,39 @@ def outputs_to_text(outputs: Optional[Iterable[Any]], *, include_citations: bool
         if isinstance(text, str) and text.strip():
             parts.append(text)
     
-    result = _strip_duplicate_references("\n\n".join(parts).strip())
-    
-    # Resolve redirect URLs to actual source URLs (if citations enabled)
-    if include_citations:
-        result = resolve_sources_in_text(result)
-    
-    return result
+    return _finalize_text("\n\n".join(parts), include_citations=include_citations)
+
+
+def _step_text_content(steps: Optional[Iterable[Any]]) -> Iterable[Any]:
+    """Yield text-bearing content from modern Interaction model output steps."""
+    if not steps:
+        return
+    for step in steps:
+        if _get(step, "type") != "model_output":
+            continue
+        content = _get(step, "content")
+        if content:
+            yield from content
 
 
 def interaction_to_result(interaction: Any, *, include_citations: bool = True) -> dict[str, Any]:
     """Convert an Interaction object to a JSON-serializable summary."""
 
     outputs = _get(interaction, "outputs")
-    text = outputs_to_text(outputs, include_citations=include_citations)
+    if outputs:
+        text = outputs_to_text(outputs, include_citations=include_citations)
+    else:
+        # Current google-genai Interaction objects expose `steps` and the
+        # convenience `output_text` property instead of the legacy `outputs`
+        # field. Prefer the SDK property, while retaining dict compatibility.
+        output_text = _get(interaction, "output_text")
+        if isinstance(output_text, str):
+            text = _finalize_text(output_text, include_citations=include_citations)
+        else:
+            text = outputs_to_text(
+                _step_text_content(_get(interaction, "steps")),
+                include_citations=include_citations,
+            )
 
     return {
         "status": _get(interaction, "status"),

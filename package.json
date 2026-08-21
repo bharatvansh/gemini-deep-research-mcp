@@ -5,11 +5,14 @@
     "bin": {
         "gemini-deep-research-mcp": "bin/cli.js"
     },
+    "scripts": {
+        "prepack": "node scripts/prepack.js",
+        "postpack": "node scripts/postpack.js",
+        "postpublish": "node scripts/postpack.js"
+    },
     "files": [
-        "bin",
-        "README.npm.md"
+        "bin"
     ],
-    "readme": "README.npm.md",
     "keywords": [
         "mcp",
         "gemini",

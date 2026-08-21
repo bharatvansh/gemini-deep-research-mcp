@@ -1,21 +1,12 @@
-# Ignore the main README so npm uses README.npm.md
-README.md
+# Ignore Python and dev files from npm package
+README.npm.md
 README.pypi.md
-
-# Python/PyPI files
-*.py
-pyproject.toml
+.readme.bak
+*.bak
+*.tgz
 src/
 tests/
-*.egg-info/
-dist/
-build/
-__pycache__/
-.pytest_cache/
-
-# Config files
-.env
-.env.example
-.vscode/
+pyproject.toml
 .github/
-.git/
+.venv/
+.env

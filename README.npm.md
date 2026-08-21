@@ -232,7 +232,6 @@ Checks the status of a Deep Research job using its `job_id` and returns the comp
 |----------|----------|---------|-------------|
 | `GEMINI_API_KEY` | ✓ | — | Your [Gemini API key](https://aistudio.google.com/apikey) |
 | `GEMINI_DEEP_RESEARCH_AGENT` | | `deep-research-preview-04-2026` | Deep Research agent to use. Set to `deep-research-max-preview-04-2026` for maximum thoroughness, or `deep-research-preview-04-2026` for standard speed. |
-| `GEMINI_MODEL` | | `gemini-3.5-flash` | Default Gemini model fallback for other tasks. |
 
 ## Links
 

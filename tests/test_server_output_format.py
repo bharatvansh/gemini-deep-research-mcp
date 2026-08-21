@@ -14,7 +14,7 @@ def test_start_deep_research_returns_structured_only(monkeypatch: pytest.MonkeyP
         "_get_client_and_settings",
         lambda: (
             object(),
-            server.Settings(api_key="x", model="m", deep_research_agent="agent", poll_interval_seconds=1.0),
+            server.Settings(api_key="x", deep_research_agent="agent"),
         ),
     )
     monkeypatch.setattr(server, "sdk_start_deep_research", lambda _client, *, prompt, agent: {"id": "int_123", "status": "in_progress"})
@@ -34,7 +34,7 @@ def test_start_deep_research_preserves_initial_status(monkeypatch: pytest.Monkey
         "_get_client_and_settings",
         lambda: (
             object(),
-            server.Settings(api_key="x", model="m", deep_research_agent="agent", poll_interval_seconds=1.0),
+            server.Settings(api_key="x", deep_research_agent="agent"),
         ),
     )
     monkeypatch.setattr(
@@ -58,7 +58,7 @@ def test_check_deep_research_in_progress(monkeypatch: pytest.MonkeyPatch) -> Non
         "_get_client_and_settings",
         lambda: (
             object(),
-            server.Settings(api_key="x", model="m", deep_research_agent="agent", poll_interval_seconds=1.0),
+            server.Settings(api_key="x", deep_research_agent="agent"),
         ),
     )
     monkeypatch.setattr(
@@ -85,7 +85,7 @@ def test_check_deep_research_failed_with_error(monkeypatch: pytest.MonkeyPatch) 
         "_get_client_and_settings",
         lambda: (
             object(),
-            server.Settings(api_key="x", model="m", deep_research_agent="agent", poll_interval_seconds=1.0),
+            server.Settings(api_key="x", deep_research_agent="agent"),
         ),
     )
     monkeypatch.setattr(
@@ -114,7 +114,7 @@ def test_check_deep_research_completed(monkeypatch: pytest.MonkeyPatch) -> None:
         "_get_client_and_settings",
         lambda: (
             object(),
-            server.Settings(api_key="x", model="m", deep_research_agent="agent", poll_interval_seconds=1.0),
+            server.Settings(api_key="x", deep_research_agent="agent"),
         ),
     )
     monkeypatch.setattr(server, "get_interaction", lambda _client, *, job_id: {"id": job_id, "status": "completed"})
@@ -144,7 +144,7 @@ def test_async_tools_fastmcp_validation(monkeypatch: pytest.MonkeyPatch) -> None
         "_get_client_and_settings",
         lambda: (
             object(),
-            server.Settings(api_key="x", model="m", deep_research_agent="agent", poll_interval_seconds=1.0),
+            server.Settings(api_key="x", deep_research_agent="agent"),
         ),
     )
     monkeypatch.setattr(server, "sdk_start_deep_research", lambda _client, *, prompt, agent: {"id": "int_abc", "status": "in_progress"})

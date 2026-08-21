@@ -9,9 +9,7 @@ from dotenv import load_dotenv
 @dataclass(frozen=True)
 class Settings:
     api_key: str
-    model: str
     deep_research_agent: str
-    poll_interval_seconds: float = 10.0
 
 
 def load_settings() -> Settings:
@@ -22,13 +20,11 @@ def load_settings() -> Settings:
 
     api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or ""
 
-    model = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
     deep_research_agent = os.getenv(
         "GEMINI_DEEP_RESEARCH_AGENT", "deep-research-preview-04-2026"
     )
 
     return Settings(
         api_key=api_key,
-        model=model,
         deep_research_agent=deep_research_agent,
     )

@@ -29,7 +29,7 @@ def test_check_deep_research_missing_job_raises_error(monkeypatch: pytest.Monkey
         "_get_client_and_settings",
         lambda: (
             object(),
-            server.Settings(api_key="x", model="m", deep_research_agent="agent", poll_interval_seconds=1.0),
+            server.Settings(api_key="x", deep_research_agent="agent"),
         ),
     )
     monkeypatch.setattr(server, "get_interaction", lambda _client, *, job_id: None)
